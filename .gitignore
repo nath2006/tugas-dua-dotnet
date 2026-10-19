@@ -1,0 +1,30 @@
+## Build output & intermediate files
+bin/
+obj/
+out/
+
+## User-specific / IDE settings
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Environment & sensitive configuration files
+appsettings.Development.json
+appsettings.Local.json
+*.env
+
+## Publish output
+publish/
+
+## Test results & Coverage
+TestResults/
+*.coverage
+*.coveragexml
+
+## OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
