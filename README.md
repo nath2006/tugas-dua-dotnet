@@ -1,7 +1,8 @@
-# IF133 - Tugas 1
+# IF133 - Final
 
 ## Identitas
 - Nama: Anathapindika Surja Putra
+- NIM: 1003240007
 - Kelas: INFORMATIKA (EKSEKUTIF)
 
 ## Studi Kasus
