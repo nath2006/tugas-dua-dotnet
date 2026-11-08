@@ -1,0 +1,187 @@
+newman
+
+IF133 P6 - API Quality dan JWT
+
+→ 01 Tanpa token ditolak
+  GET https://localhost:7308/api/products [401 Unauthorized, 361B, 68ms]
+  √  HTTP 401
+  √  ProblemDetails dan traceId
+
+→ 02 Login password salah
+  POST https://localhost:7308/api/auth/login [401 Unauthorized, 405B, 38ms]
+  √  HTTP 401
+  √  ProblemDetails dan traceId
+
+→ 03 Login invalid
+  POST https://localhost:7308/api/auth/login [400 Bad Request, 419B, 4ms]
+  √  HTTP 400
+  √  ProblemDetails dan traceId
+
+→ 04 Login admin
+  POST https://localhost:7308/api/auth/login [200 OK, 501B, 33ms]
+  √  HTTP 200
+  √  Token diterbitkan
+
+→ 05 Login reader
+  POST https://localhost:7308/api/auth/login [200 OK, 504B, 37ms]
+  √  HTTP 200
+  √  Token diterbitkan
+
+→ 06 Reader GET diizinkan
+  GET https://localhost:7308/api/products [200 OK, 458B, 17ms]
+  √  HTTP 200
+  √  Array
+
+→ 07 Reader POST ditolak
+  POST https://localhost:7308/api/products [403 Forbidden, 323B, 7ms]
+  √  HTTP 403
+  √  ProblemDetails dan traceId
+
+→ 08 Admin POST valid
+  POST https://localhost:7308/api/products [201 Created, 317B, 20ms]
+  √  HTTP 201
+  √  Location
+
+→ 09 GET semua
+  GET https://localhost:7308/api/products [200 OK, 576B, 12ms]
+  √  HTTP 200
+
+→ 10 GET detail
+  GET https://localhost:7308/api/products/15 [200 OK, 265B, 13ms]
+  √  HTTP 200
+  √  ID sesuai
+
+→ 11 Reader PUT ditolak
+  PUT https://localhost:7308/api/products/15 [403 Forbidden, 326B, 2ms]
+  √  HTTP 403
+  √  ProblemDetails dan traceId
+
+→ 12 Reader DELETE ditolak
+  DELETE https://localhost:7308/api/products/15 [403 Forbidden, 326B, 2ms]
+  √  HTTP 403
+  √  ProblemDetails dan traceId
+
+→ 13 Invalid Nama kosong
+  POST https://localhost:7308/api/products [400 Bad Request, 358B, 11ms]
+  √  HTTP 400
+  √  ProblemDetails dan traceId
+
+→ 14 Invalid Nama >100
+  POST https://localhost:7308/api/products [400 Bad Request, 396B, 12ms]
+  √  HTTP 400
+  √  ProblemDetails dan traceId
+
+→ 15 Invalid Deskripsi >500
+  POST https://localhost:7308/api/products [400 Bad Request, 410B, 16ms]
+  √  HTTP 400
+  √  ProblemDetails dan traceId
+
+→ 16 Invalid Harga negatif
+  POST https://localhost:7308/api/products [400 Bad Request, 370B, 12ms]
+  √  HTTP 400
+  √  ProblemDetails dan traceId
+
+→ 17 Invalid Harga melebihi batas
+  POST https://localhost:7308/api/products [400 Bad Request, 370B, 12ms]
+  √  HTTP 400
+  √  ProblemDetails dan traceId
+
+→ 18 Invalid Harga hilang
+  POST https://localhost:7308/api/products [400 Bad Request, 353B, 9ms]
+  √  HTTP 400
+  √  ProblemDetails dan traceId
+
+→ 19 Invalid Stok negatif
+  POST https://localhost:7308/api/products [400 Bad Request, 360B, 11ms]
+  √  HTTP 400
+  √  ProblemDetails dan traceId
+
+→ 20 Invalid Stok hilang
+  POST https://localhost:7308/api/products [400 Bad Request, 352B, 10ms]
+  √  HTTP 400
+  √  ProblemDetails dan traceId
+
+→ 21 PUT invalid
+  PUT https://localhost:7308/api/products/15 [400 Bad Request, 373B, 11ms]
+  √  HTTP 400
+  √  ProblemDetails dan traceId
+
+→ 22 JSON rusak
+  POST https://localhost:7308/api/products [400 Bad Request, 550B, 9ms]
+  √  HTTP 400
+  √  ProblemDetails dan traceId
+
+→ 23 Admin PUT valid
+  PUT https://localhost:7308/api/products/15 [204 No Content, 81B, 40ms]
+  √  HTTP 204
+  √  Body kosong
+
+→ 24 Verifikasi PUT
+  GET https://localhost:7308/api/products/15 [200 OK, 273B, 14ms]
+  √  HTTP 200
+  √  Update tersimpan
+
+→ 25 CORS diizinkan
+  OPTIONS https://localhost:7308/api/products [204 No Content, 242B, 2ms]
+  √  HTTP 204
+  √  Body kosong
+  √  CORS origin
+
+→ 26 CORS ditolak
+  OPTIONS https://localhost:7308/api/products [204 No Content, 81B, 2ms]
+  √  HTTP 204
+  √  Body kosong
+  √  CORS origin
+
+→ 27 Route tidak dikenal
+  GET https://localhost:7308/api/not-found [404 Not Found, 320B, 2ms]
+  √  HTTP 404
+  √  ProblemDetails dan traceId
+
+→ 28 Method tidak didukung
+  PATCH https://localhost:7308/api/products/15 [405 Method Not Allowed, 359B, 2ms]
+  √  HTTP 405
+  √  ProblemDetails dan traceId
+
+→ 29 DELETE hanya produk uji
+  DELETE https://localhost:7308/api/products/15 [204 No Content, 81B, 18ms]
+  √  HTTP 204
+  √  Body kosong
+
+→ 30 GET setelah DELETE
+  GET https://localhost:7308/api/products/15 [404 Not Found, 382B, 14ms]
+  √  HTTP 404
+  √  ProblemDetails dan traceId
+
+→ 31 PUT setelah DELETE
+  PUT https://localhost:7308/api/products/15 [404 Not Found, 382B, 16ms]
+  √  HTTP 404
+  √  ProblemDetails dan traceId
+
+→ 32 DELETE ulang
+  DELETE https://localhost:7308/api/products/15 [404 Not Found, 382B, 25ms]
+  √  HTTP 404
+  √  ProblemDetails dan traceId
+
+┌─────────────────────────┬──────────────────┬──────────────────┐
+│                         │         executed │           failed │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              iterations │                1 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│                requests │               32 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│            test-scripts │               32 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│      prerequest-scripts │                0 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              assertions │               65 │                0 │
+├─────────────────────────┴──────────────────┴──────────────────┤
+│ total run duration: 3.1s                                      │
+├───────────────────────────────────────────────────────────────┤
+│ total data received: 6.17kB (approx)                          │
+├───────────────────────────────────────────────────────────────┤
+│ average response time: 15ms [min: 2ms, max: 68ms, s.d.: 14ms] │
+└───────────────────────────────────────────────────────────────┘
+
+(node:31168) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)

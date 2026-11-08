@@ -1,0 +1,13 @@
+{
+  "Login berhasil.": true,
+  "Login gagal.": true,
+  "Validasi request gagal.": true,
+  "Produk dibuat.": true,
+  "Produk diperbarui.": true,
+  "Produk dihapus.": true,
+  "Produk tidak ditemukan.": true,
+  "Unexpected error.": true,
+  "traceId HTTP 400 ditemukan pada log": true,
+  "traceId HTTP 404 ditemukan pada log": true,
+  "traceId HTTP 500 ditemukan pada log": true
+}

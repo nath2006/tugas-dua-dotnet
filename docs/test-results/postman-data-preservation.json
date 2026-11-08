@@ -1,0 +1,16 @@
+{
+  "verifiedAt": "2026-11-08T15:34:29.353338+00:00",
+  "method": "GET /api/products after Postman UI DELETE and GET 404",
+  "existingProductsUnchanged": true,
+  "fixtureRemoved": true,
+  "originalProductIds": [
+    7,
+    8,
+    9
+  ],
+  "finalProductIds": [
+    7,
+    8,
+    9
+  ]
+}

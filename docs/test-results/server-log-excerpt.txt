@@ -1,0 +1,52 @@
+
+=== SERVER NORMAL ===
+Login gagal. TraceId: 0HNPTK8JGOBRJ:00000001
+Login gagal. TraceId: 0HNPTK8JGOBRK:00000001
+Validasi request gagal. Method: POST, Path: /api/auth/login, TraceId: 0HNPTK8JGOBRL:00000001
+Login berhasil. Role: Admin, TraceId: 0HNPTK8JGOBRM:00000001
+Login berhasil. Role: Reader, TraceId: 0HNPTK8JGOBRN:00000001
+Produk dibuat. ProductId: 14, TraceId: 0HNPTK8JGOBRS:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBS1:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBS2:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBS3:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBS4:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBS5:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBS6:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBS7:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBS8:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBS9:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBSA:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBSB:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBSC:00000001
+Validasi request gagal. Method: PUT, Path: /api/products/14, TraceId: 0HNPTK8JGOBSD:00000001
+Validasi request gagal. Method: PUT, Path: /api/products/14, TraceId: 0HNPTK8JGOBSE:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBSF:00000001
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBSH:00000001
+Produk diperbarui. ProductId: 14, TraceId: 0HNPTK8JGOBSJ:00000001
+Produk dihapus. ProductId: 14, TraceId: 0HNPTK8JGOBT1:00000001
+Produk tidak ditemukan. ProductId: 14, Method: GET, TraceId: 0HNPTK8JGOBT2:00000001
+Produk tidak ditemukan. ProductId: 14, Method: PUT, TraceId: 0HNPTK8JGOBT3:00000001
+Produk tidak ditemukan. ProductId: 14, Method: DELETE, TraceId: 0HNPTK8JGOBT4:00000001
+Login gagal. TraceId: 0HNPTK8JGOBT7:00000002
+Validasi request gagal. Method: POST, Path: /api/auth/login, TraceId: 0HNPTK8JGOBT7:00000003
+Login berhasil. Role: Admin, TraceId: 0HNPTK8JGOBT7:00000004
+Login berhasil. Role: Reader, TraceId: 0HNPTK8JGOBT7:00000005
+Produk dibuat. ProductId: 15, TraceId: 0HNPTK8JGOBT7:00000008
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBT7:0000000D
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBT7:0000000E
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBT7:0000000F
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBT7:00000010
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBT7:00000011
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBT7:00000012
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBT7:00000013
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBT7:00000014
+Validasi request gagal. Method: PUT, Path: /api/products/15, TraceId: 0HNPTK8JGOBT7:00000015
+Validasi request gagal. Method: POST, Path: /api/products, TraceId: 0HNPTK8JGOBT7:00000016
+Produk diperbarui. ProductId: 15, TraceId: 0HNPTK8JGOBT7:00000017
+Produk dihapus. ProductId: 15, TraceId: 0HNPTK8JGOBT7:0000001D
+Produk tidak ditemukan. ProductId: 15, Method: GET, TraceId: 0HNPTK8JGOBT7:0000001E
+Produk tidak ditemukan. ProductId: 15, Method: PUT, TraceId: 0HNPTK8JGOBT7:0000001F
+Produk tidak ditemukan. ProductId: 15, Method: DELETE, TraceId: 0HNPTK8JGOBT7:00000020
+
+=== SERVER FAULT TERISOLASI ===
+Unexpected error. Method: GET, Path: /api/products, TraceId: 0HNPTK8LAD4KK:00000001
