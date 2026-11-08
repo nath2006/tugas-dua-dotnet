@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  IF133.Tugas1.Api -> C:\Users\LOQ\AppData\Local\hermes\cache\scratch\if133-package-build\IF133.Tugas1.Api.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.01

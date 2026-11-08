@@ -15,6 +15,16 @@ out/
 appsettings.Development.json
 appsettings.Local.json
 *.env
+.env*
+*.postman_environment.json
+*.private.json
+postman/environments/*private*
+# Local Postman workspace files (portable collection JSON is versioned)
+/.postman/
+/postman/
+/00 IF133 Bukti Postman/
+/IF133 P6 - API Quality dan JWT/
+__pycache__/
 
 ## Publish output
 publish/

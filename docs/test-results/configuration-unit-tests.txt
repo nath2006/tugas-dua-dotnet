@@ -1,0 +1,16 @@
+test_hash_roundtrip_preserves_password_whitespace (test_configuration_helpers.PasswordHashTests.test_hash_roundtrip_preserves_password_whitespace) ... ok
+test_hash_uses_random_salts (test_configuration_helpers.PasswordHashTests.test_hash_uses_random_salts) ... ok
+test_accepts_1024_characters (test_configuration_helpers.ReadPasswordTests.test_accepts_1024_characters) ... ok
+test_accepts_512_emoji_unchanged (test_configuration_helpers.ReadPasswordTests.test_accepts_512_emoji_unchanged) ... ok
+test_mixed_bmp_non_bmp_upper_boundary (test_configuration_helpers.ReadPasswordTests.test_mixed_bmp_non_bmp_upper_boundary) ... ok
+test_preserves_whitespace_in_otherwise_valid_password (test_configuration_helpers.ReadPasswordTests.test_preserves_whitespace_in_otherwise_valid_password) ... ok
+test_rejects_513_emoji_then_accepts_valid_password (test_configuration_helpers.ReadPasswordTests.test_rejects_513_emoji_then_accepts_valid_password) ... ok
+test_rejects_mismatched_confirmation (test_configuration_helpers.ReadPasswordTests.test_rejects_mismatched_confirmation) ... ok
+test_rejects_over_1024_characters_then_accepts_valid_password (test_configuration_helpers.ReadPasswordTests.test_rejects_over_1024_characters_then_accepts_valid_password) ... ok
+test_rejects_short_password_then_accepts_12_characters (test_configuration_helpers.ReadPasswordTests.test_rejects_short_password_then_accepts_12_characters) ... ok
+test_rejects_whitespace_only_then_accepts_valid_password (test_configuration_helpers.ReadPasswordTests.test_rejects_whitespace_only_then_accepts_valid_password) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.241s
+
+OK

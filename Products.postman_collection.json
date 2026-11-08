@@ -1,0 +1,1064 @@
+{
+  "info": {
+    "name": "IF133 P6 - API Quality dan JWT",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Pengujian nyata CRUD, validasi, ProblemDetails, JWT Admin/Reader dan CORS. Isi password melalui environment lokal, jangan ekspor token/password. Jalankan berurutan; hanya produk buatan runner yang dihapus."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{adminToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:7216"
+    },
+    {
+      "key": "adminUsername",
+      "value": "admin"
+    },
+    {
+      "key": "readerUsername",
+      "value": "reader"
+    },
+    {
+      "key": "adminPassword",
+      "value": ""
+    },
+    {
+      "key": "readerPassword",
+      "value": ""
+    },
+    {
+      "key": "adminToken",
+      "value": ""
+    },
+    {
+      "key": "readerToken",
+      "value": ""
+    },
+    {
+      "key": "productId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Tanpa token ditolak",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/products",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Login password salah",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/auth/login",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{adminUsername}}\",\n  \"password\": \"wrong-test-password\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 Login invalid",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/auth/login",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 Login admin",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/auth/login",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{adminUsername}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "if(pm.response.code===200)pm.collectionVariables.set(\"adminToken\",pm.response.json().accessToken);",
+              "pm.test(\"Token diterbitkan\",()=>pm.expect(pm.response.json().accessToken).to.be.a(\"string\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 Login reader",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/auth/login",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{readerUsername}}\",\n  \"password\": \"{{readerPassword}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "if(pm.response.code===200)pm.collectionVariables.set(\"readerToken\",pm.response.json().accessToken);",
+              "pm.test(\"Token diterbitkan\",()=>pm.expect(pm.response.json().accessToken).to.be.a(\"string\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 Reader GET diizinkan",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/products",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{readerToken}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "pm.test(\"Array\",()=>pm.expect(pm.response.json()).to.be.an(\"array\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 Reader POST ditolak",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{readerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": 350000,\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 403\",()=>pm.response.to.have.status(403));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 Admin POST valid",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": 350000,\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\",()=>pm.response.to.have.status(201));",
+              "if(pm.response.code===201)pm.collectionVariables.set(\"productId\",pm.response.json().id);else pm.execution.setNextRequest(null);",
+              "pm.test(\"Location\",()=>pm.expect(pm.response.headers.get(\"Location\")).to.include(\"/api/products/\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 GET semua",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/products"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 GET detail",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/products/{{productId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "pm.test(\"ID sesuai\",()=>pm.expect(pm.response.json().id).to.eql(Number(pm.collectionVariables.get(\"productId\"))));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 Reader PUT ditolak",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products/{{productId}}",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{readerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": 350000,\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 403\",()=>pm.response.to.have.status(403));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 Reader DELETE ditolak",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/products/{{productId}}",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{readerToken}}",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 403\",()=>pm.response.to.have.status(403));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 Invalid Nama kosong",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": 350000,\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14 Invalid Nama >100",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": 350000,\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15 Invalid Deskripsi >500",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\",\n  \"price\": 350000,\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "16 Invalid Harga negatif",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": -1,\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "17 Invalid Harga melebihi batas",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": 1000000000,\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "18 Invalid Harga hilang",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "19 Invalid Stok negatif",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": 350000,\n  \"stock\": -1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "20 Invalid Stok hilang",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": 350000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "21 PUT invalid",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products/{{productId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": -1,\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "22 JSON rusak",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "23 Admin PUT valid",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products/{{productId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6 Updated\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": 350000,\n  \"stock\": 8\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\",()=>pm.response.to.have.status(204));",
+              "pm.test(\"Body kosong\",()=>pm.expect(pm.response.text()).to.eql(\"\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "24 Verifikasi PUT",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/products/{{productId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));",
+              "pm.test(\"Update tersimpan\",()=>{const b=pm.response.json();pm.expect(b.name).to.eql(\"Produk Uji Postman P6 Updated\");pm.expect(b.stock).to.eql(8);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "25 CORS diizinkan",
+      "request": {
+        "method": "OPTIONS",
+        "header": [
+          {
+            "key": "Origin",
+            "value": "http://localhost:5173"
+          },
+          {
+            "key": "Access-Control-Request-Method",
+            "value": "POST"
+          },
+          {
+            "key": "Access-Control-Request-Headers",
+            "value": "authorization,content-type"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\",()=>pm.response.to.have.status(204));",
+              "pm.test(\"Body kosong\",()=>pm.expect(pm.response.text()).to.eql(\"\"));",
+              "pm.test(\"CORS origin\",()=>pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.eql(\"http://localhost:5173\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "26 CORS ditolak",
+      "request": {
+        "method": "OPTIONS",
+        "header": [
+          {
+            "key": "Origin",
+            "value": "http://localhost:9999"
+          },
+          {
+            "key": "Access-Control-Request-Method",
+            "value": "POST"
+          },
+          {
+            "key": "Access-Control-Request-Headers",
+            "value": "authorization,content-type"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\",()=>pm.response.to.have.status(204));",
+              "pm.test(\"Body kosong\",()=>pm.expect(pm.response.text()).to.eql(\"\"));",
+              "pm.test(\"CORS origin\",()=>pm.expect(pm.response.headers.get(\"Access-Control-Allow-Origin\")).to.not.exist);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "27 Route tidak dikenal",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/not-found"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "28 Method tidak didukung",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products/{{productId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": 350000,\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 405\",()=>pm.response.to.have.status(405));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "29 DELETE hanya produk uji",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/products/{{productId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\",()=>pm.response.to.have.status(204));",
+              "pm.test(\"Body kosong\",()=>pm.expect(pm.response.text()).to.eql(\"\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "30 GET setelah DELETE",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/products/{{productId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "31 PUT setelah DELETE",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/products/{{productId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produk Uji Postman P6\",\n  \"description\": \"Data sementara Collection Runner\",\n  \"price\": 350000,\n  \"stock\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "32 DELETE ulang",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/products/{{productId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));",
+              "pm.test(\"ProblemDetails dan traceId\",()=>{const b=pm.response.json();pm.expect(b.status).to.eql(pm.response.code);pm.expect(b.title).to.be.a(\"string\");pm.expect(b.traceId).to.be.a(\"string\");});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

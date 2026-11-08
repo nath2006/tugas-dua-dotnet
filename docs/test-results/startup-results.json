@@ -1,0 +1,88 @@
+{
+  "executedAt": "2026-11-08T14:10:58.410190+00:00",
+  "total": 11,
+  "passed": 11,
+  "results": [
+    {
+      "name": "JWT key terlalu pendek",
+      "passed": true,
+      "expected": "Application fails startup with safe configuration message"
+    },
+    {
+      "name": "Issuer kosong",
+      "passed": true,
+      "expected": "Application fails startup with safe configuration message"
+    },
+    {
+      "name": "Audience kosong",
+      "passed": true,
+      "expected": "Application fails startup with safe configuration message"
+    },
+    {
+      "name": "Expiry nol",
+      "passed": true,
+      "expected": "Application fails startup with safe configuration message"
+    },
+    {
+      "name": "Role tidak dikenal",
+      "passed": true,
+      "expected": "Application fails startup with safe configuration message"
+    },
+    {
+      "name": "Hash plaintext ditolak",
+      "passed": true,
+      "expected": "Application fails startup with safe configuration message"
+    },
+    {
+      "name": "Username duplikat",
+      "passed": true,
+      "expected": "Application fails startup with safe configuration message"
+    },
+    {
+      "name": "Username melebihi batas login",
+      "passed": true,
+      "expected": "Application fails startup with safe configuration message"
+    },
+    {
+      "name": "Production endpoint terlindungi",
+      "passed": true,
+      "actualStatus": 401,
+      "expectedStatus": 401,
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/problem+json; charset=utf-8",
+        "Date": "Sun, 08 Nov 2026 14:10:57 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked",
+        "WWW-Authenticate": "Bearer"
+      },
+      "body": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.2\",\"title\":\"Autentikasi diperlukan\",\"status\":401,\"instance\":\"/api/products\",\"traceId\":\"0HNPTK8E5U0RP:00000001\"}"
+    },
+    {
+      "name": "Production Swagger dinonaktifkan",
+      "passed": true,
+      "actualStatus": 404,
+      "expectedStatus": 404,
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/problem+json",
+        "Date": "Sun, 08 Nov 2026 14:10:57 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "body": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.5\",\"title\":\"Resource tidak ditemukan\",\"status\":404,\"instance\":\"/swagger/v1/swagger.json\",\"traceId\":\"0HNPTK8E5U0RQ:00000001\"}"
+    },
+    {
+      "name": "Production CORS deny by default",
+      "passed": true,
+      "actualStatus": 204,
+      "expectedStatus": 204,
+      "headers": {
+        "Connection": "close",
+        "Date": "Sun, 08 Nov 2026 14:10:57 GMT",
+        "Server": "Kestrel"
+      },
+      "body": ""
+    }
+  ]
+}

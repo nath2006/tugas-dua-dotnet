@@ -1,0 +1,536 @@
+{
+  "stats": {
+    "iterations": {
+      "total": 1,
+      "pending": 0,
+      "failed": 0
+    },
+    "items": {
+      "total": 32,
+      "pending": 0,
+      "failed": 0
+    },
+    "scripts": {
+      "total": 32,
+      "pending": 0,
+      "failed": 0
+    },
+    "prerequests": {
+      "total": 32,
+      "pending": 0,
+      "failed": 0
+    },
+    "requests": {
+      "total": 32,
+      "pending": 0,
+      "failed": 0
+    },
+    "tests": {
+      "total": 32,
+      "pending": 0,
+      "failed": 0
+    },
+    "assertions": {
+      "total": 65,
+      "pending": 0,
+      "failed": 0
+    },
+    "testScripts": {
+      "total": 32,
+      "pending": 0,
+      "failed": 0
+    },
+    "prerequestScripts": {
+      "total": 0,
+      "pending": 0,
+      "failed": 0
+    }
+  },
+  "failures": [],
+  "executions": [
+    {
+      "name": "01 Tanpa token ditolak",
+      "method": "GET",
+      "status": 401,
+      "assertions": [
+        {
+          "assertion": "HTTP 401",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "02 Login password salah",
+      "method": "POST",
+      "status": 401,
+      "assertions": [
+        {
+          "assertion": "HTTP 401",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "03 Login invalid",
+      "method": "POST",
+      "status": 400,
+      "assertions": [
+        {
+          "assertion": "HTTP 400",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "04 Login admin",
+      "method": "POST",
+      "status": 200,
+      "assertions": [
+        {
+          "assertion": "HTTP 200",
+          "skipped": false
+        },
+        {
+          "assertion": "Token diterbitkan",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "05 Login reader",
+      "method": "POST",
+      "status": 200,
+      "assertions": [
+        {
+          "assertion": "HTTP 200",
+          "skipped": false
+        },
+        {
+          "assertion": "Token diterbitkan",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "06 Reader GET diizinkan",
+      "method": "GET",
+      "status": 200,
+      "assertions": [
+        {
+          "assertion": "HTTP 200",
+          "skipped": false
+        },
+        {
+          "assertion": "Array",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "07 Reader POST ditolak",
+      "method": "POST",
+      "status": 403,
+      "assertions": [
+        {
+          "assertion": "HTTP 403",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "08 Admin POST valid",
+      "method": "POST",
+      "status": 201,
+      "assertions": [
+        {
+          "assertion": "HTTP 201",
+          "skipped": false
+        },
+        {
+          "assertion": "Location",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "09 GET semua",
+      "method": "GET",
+      "status": 200,
+      "assertions": [
+        {
+          "assertion": "HTTP 200",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "10 GET detail",
+      "method": "GET",
+      "status": 200,
+      "assertions": [
+        {
+          "assertion": "HTTP 200",
+          "skipped": false
+        },
+        {
+          "assertion": "ID sesuai",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "11 Reader PUT ditolak",
+      "method": "PUT",
+      "status": 403,
+      "assertions": [
+        {
+          "assertion": "HTTP 403",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "12 Reader DELETE ditolak",
+      "method": "DELETE",
+      "status": 403,
+      "assertions": [
+        {
+          "assertion": "HTTP 403",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "13 Invalid Nama kosong",
+      "method": "POST",
+      "status": 400,
+      "assertions": [
+        {
+          "assertion": "HTTP 400",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "14 Invalid Nama >100",
+      "method": "POST",
+      "status": 400,
+      "assertions": [
+        {
+          "assertion": "HTTP 400",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "15 Invalid Deskripsi >500",
+      "method": "POST",
+      "status": 400,
+      "assertions": [
+        {
+          "assertion": "HTTP 400",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "16 Invalid Harga negatif",
+      "method": "POST",
+      "status": 400,
+      "assertions": [
+        {
+          "assertion": "HTTP 400",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "17 Invalid Harga melebihi batas",
+      "method": "POST",
+      "status": 400,
+      "assertions": [
+        {
+          "assertion": "HTTP 400",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "18 Invalid Harga hilang",
+      "method": "POST",
+      "status": 400,
+      "assertions": [
+        {
+          "assertion": "HTTP 400",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "19 Invalid Stok negatif",
+      "method": "POST",
+      "status": 400,
+      "assertions": [
+        {
+          "assertion": "HTTP 400",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "20 Invalid Stok hilang",
+      "method": "POST",
+      "status": 400,
+      "assertions": [
+        {
+          "assertion": "HTTP 400",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "21 PUT invalid",
+      "method": "PUT",
+      "status": 400,
+      "assertions": [
+        {
+          "assertion": "HTTP 400",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "22 JSON rusak",
+      "method": "POST",
+      "status": 400,
+      "assertions": [
+        {
+          "assertion": "HTTP 400",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "23 Admin PUT valid",
+      "method": "PUT",
+      "status": 204,
+      "assertions": [
+        {
+          "assertion": "HTTP 204",
+          "skipped": false
+        },
+        {
+          "assertion": "Body kosong",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "24 Verifikasi PUT",
+      "method": "GET",
+      "status": 200,
+      "assertions": [
+        {
+          "assertion": "HTTP 200",
+          "skipped": false
+        },
+        {
+          "assertion": "Update tersimpan",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "25 CORS diizinkan",
+      "method": "OPTIONS",
+      "status": 204,
+      "assertions": [
+        {
+          "assertion": "HTTP 204",
+          "skipped": false
+        },
+        {
+          "assertion": "Body kosong",
+          "skipped": false
+        },
+        {
+          "assertion": "CORS origin",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "26 CORS ditolak",
+      "method": "OPTIONS",
+      "status": 204,
+      "assertions": [
+        {
+          "assertion": "HTTP 204",
+          "skipped": false
+        },
+        {
+          "assertion": "Body kosong",
+          "skipped": false
+        },
+        {
+          "assertion": "CORS origin",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "27 Route tidak dikenal",
+      "method": "GET",
+      "status": 404,
+      "assertions": [
+        {
+          "assertion": "HTTP 404",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "28 Method tidak didukung",
+      "method": "PATCH",
+      "status": 405,
+      "assertions": [
+        {
+          "assertion": "HTTP 405",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "29 DELETE hanya produk uji",
+      "method": "DELETE",
+      "status": 204,
+      "assertions": [
+        {
+          "assertion": "HTTP 204",
+          "skipped": false
+        },
+        {
+          "assertion": "Body kosong",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "30 GET setelah DELETE",
+      "method": "GET",
+      "status": 404,
+      "assertions": [
+        {
+          "assertion": "HTTP 404",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "31 PUT setelah DELETE",
+      "method": "PUT",
+      "status": 404,
+      "assertions": [
+        {
+          "assertion": "HTTP 404",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "32 DELETE ulang",
+      "method": "DELETE",
+      "status": 404,
+      "assertions": [
+        {
+          "assertion": "HTTP 404",
+          "skipped": false
+        },
+        {
+          "assertion": "ProblemDetails dan traceId",
+          "skipped": false
+        }
+      ]
+    }
+  ]
+}

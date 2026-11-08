@@ -1,6 +1,24 @@
-@IF133.Tugas1.Api_HostAddress = http://localhost:5068
+@baseUrl = https://localhost:7216
+# Isi token hanya secara lokal; jangan commit token atau password asli.
+@accessToken =
 
-GET {{IF133.Tugas1.Api_HostAddress}}/weatherforecast/
+### Tanpa token: harus 401
+GET {{baseUrl}}/api/products
+Accept: application/json
+
+### JWT Admin/Reader: 200 setelah token diisi
+GET {{baseUrl}}/api/products
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+### CORS development: 204 dengan header origin
+OPTIONS {{baseUrl}}/api/products
+Origin: http://localhost:5173
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: authorization,content-type
+
+### Swagger runtime (Development)
+GET {{baseUrl}}/swagger/v1/swagger.json
 Accept: application/json
 
 ###
