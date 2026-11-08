@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-11-08T15:56:10.646206+00:00",
+  "verifiedAt": "2026-11-08T16:04:40.562426+00:00",
   "httpCases": 54,
   "httpPassed": 54,
   "skippedGroups": [],
@@ -18,22 +18,18 @@
   "sourceHashes": {
     "IF133.Tugas1.Api.csproj": "4ec6d228b920ac3e7a671958e2f1f31b8c102116a3a8e0f025a092332a94914f",
     "Program.cs": "e713172b3e7fd170784f82259b06d64141ef0d256a570ea6c4e436d1c847911f",
-    "Configuration/AuthConfiguration.cs": "06bb7ebbe7fbe0e8d2b71e02662765bc5f318c2c622db2bcace97819caded8f0",
-    "Controllers/AuthController.cs": "a918c4ba581d3529f85391d412098204a2cb35913bec10766dbaeac49fe70f0b",
+    "Configuration/AuthConfiguration.cs": "51c848e302e689f55c5624c37f83cbb652e5e9a1ee6bd98d4595d4d10d77fcf3",
+    "Controllers/AuthController.cs": "d9afde04add2937dc68640f0aeda50a8791990fb858ef36b8044472aaba0593c",
     "Controllers/ProductController.cs": "b1187f476384e54988f40953cb30ac7aeffb5d7f1a77f90df8f29acf1bf97ad6",
     "Data/AppDbContext.cs": "71e6025437ae73697fd05d1392d08edeba540c2476e1783782bd7b98e6081b7e",
     "DTOs/CreateProductDto.cs": "85f7a5329200f5c4a3423563a8f4c698daa3eebf26d37979051fb99df99b1083",
-    "DTOs/LoginRequest.cs": "10e2e90e457fc57352e7f427db922c868fe66f1bfb58419cf5873e4644399f6a",
+    "DTOs/LoginRequest.cs": "a5a46fa98597dce7ec19f5e8825e818d34155b6c9475f2163eb256a0dcbfcb62",
     "DTOs/ProductResponseDto.cs": "eb7ef638e7c8d7efeb4b9a2deacc926cc2d1fc12b74ea58050dd12ad02faf559",
     "DTOs/UpdateProductDto.cs": "08bee02cc57ed69d9ae7fd3d61ac0298ac628ac3de3583bd9e9948b53e3bec89",
     "Entities/Product.cs": "91fa347a0b286963f002edeaeacb3d2c53d7e8111bf65906ba858e1792babf71",
     "Migrations/20261018162744_InitialCreate.cs": "130fbbf6cc9d76ee2a253312b2365befc84ff5a9a5a9fba7462002d74c8b5e51",
     "Migrations/20261018162744_InitialCreate.Designer.cs": "bc00c74ad8df150dbcee6c2642482561b7acdc30b025c20cb0343716401fda6c",
     "Migrations/AppDbContextModelSnapshot.cs": "772e13982d349fa52f190e92db669ca0c1b082b9d0936a1835d9e8ac54ddbaeb",
-    "OpenApi/AnonymousOperationFilter.cs": "3424886f41f0e9156fcb596b8dba2bb5f2ceec884ba31e57b907c04c1948dd9d",
-    "scripts/configure_local.py": "baeb886808eef962dbf8c6545a41c5b8668325806ba126749acf209180d1aaa2",
-    "scripts/test_api.py": "a12f8c711c0837b45575e305071647a30596e1e21307a57837b8d28ea714094a",
-    "scripts/test_configuration_helpers.py": "3cb02070718bcdb3b2d727ee0a8c1dfdb73e5c949b6447095fabaa6d122061c2",
-    "scripts/test_startup.py": "75e73302f2c1ccb7750879b0244772209880c958b46259ba267a9f21db66a804"
+    "OpenApi/AnonymousOperationFilter.cs": "8286a3387b47b5fbf1805618a41f8a36cf59982a344c894d3e5c4fd3d7b3360b"
   }
 }

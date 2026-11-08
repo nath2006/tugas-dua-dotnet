@@ -52,7 +52,6 @@ Data/               AppDbContext.cs
 Migrations/         migrasi EF Core yang sudah ada
 Configuration/      validasi JWT dan akun pada startup
 OpenApi/            filter dokumentasi anonymous operation/error content type
-scripts/            configure_local.py, test_api.py, test_startup.py
 Properties/         launchSettings.json
 Program.cs          konfigurasi service dan HTTP pipeline
 appsettings.json    logging; connection string kosong (tidak berisi credential)
@@ -64,7 +63,7 @@ README.md
   test-results/     JSON, output build/unit test dan cuplikan log aktual
 ```
 
-Lingkungan yang diverifikasi: Windows 11, .NET SDK 10.0.401, ASP.NET Core runtime 10.0.12, EF CLI 10.0.13, MySQL lokal. Paket proyek meliputi EF Core Design 10.0.14, `Microting.EntityFrameworkCore.MySql` 10.0.13, JwtBearer 10.0.14, dan Swashbuckle 10.3.0. Versi direct dependency sudah dipin sesuai paket yang diuji. Node.js diperlukan hanya jika menjalankan Newman; Python 3 diperlukan untuk helper/pengujian.
+Lingkungan yang diverifikasi: Windows 11, .NET SDK 10.0.401, ASP.NET Core runtime 10.0.12, EF CLI 10.0.13, MySQL lokal. Paket proyek meliputi EF Core Design 10.0.14, `Microting.EntityFrameworkCore.MySql` 10.0.13, JwtBearer 10.0.14, dan Swashbuckle 10.3.0. Versi direct dependency sudah dipin sesuai paket yang diuji. Node.js diperlukan hanya jika menjalankan Newman. Python tidak diperlukan untuk menjalankan proyek ini.
 
 ## 5. Persiapan dan menjalankan aplikasi
 
@@ -72,19 +71,34 @@ Jalankan perintah dari folder yang berisi `IF133.Tugas1.Api.csproj`. Aktifkan My
 
 ```powershell
 dotnet restore
-python scripts/configure_local.py
 dotnet ef database update
 dotnet build
 dotnet dev-certs https --trust
 dotnet run --launch-profile https
 ```
 
-`configure_local.py` meminta connection string dan dua password melalui input tersembunyi. Isi connection string yang cocok dengan MySQL Anda. Jika User Secret connection string sudah ada pada komputer ini, input kosong mempertahankannya. Panjang password harus 12–1024 unit UTF-16, bukan hanya whitespace, dengan konfirmasi cocok; whitespace pada password yang valid tetap dipertahankan. Penghitungan ini mengikuti batas `StringLength` .NET, termasuk untuk emoji/non-BMP Unicode. Tidak ada password default yang dibagikan. Username konfigurasi dibatasi maksimal 100 karakter agar konsisten dengan DTO login.
+Konfigurasi Development disimpan melalui **.NET User Secrets**, bukan source code. Konfigurasi lokal yang sudah ada tetap digunakan. Pada komputer baru, isi connection string, JWT, serta akun Admin dan Reader sebelum menjalankan aplikasi.
 
-- Akun `admin` memiliki role `Admin`; `reader` memiliki role `Reader`.
-- Helper menghasilkan JWT key acak dan hash PBKDF2-SHA256 (salt acak, 210000 iterasi), kemudian menyimpannya melalui .NET User Secrets.
-- `UserSecretsId` proyek: `if133-tugas1-api-local`. Secret berada di profil pengguna, **di luar repository**. User Secrets bukan penyimpanan terenkripsi dan tidak digunakan sebagai secret store produksi.
-- Konfigurasi pengujian lokal sudah pernah dibuat; **jalankan helper untuk menetapkan password yang Anda ketahui sebelum demo**. Password sementara pengujian tidak dimasukkan ke laporan atau collection.
+Contoh perintah konfigurasi (ganti placeholder secara lokal; jangan masukkan nilai rahasia ke repository):
+
+```powershell
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<connection-string-lokal>"
+dotnet user-secrets set "Jwt:Key" "<key-acak-minimal-32-byte>"
+dotnet user-secrets set "Jwt:Issuer" "IF133.Tugas1.Api"
+dotnet user-secrets set "Jwt:Audience" "IF133.Tugas1.Client"
+dotnet user-secrets set "Jwt:ExpiresMinutes" "30"
+dotnet user-secrets set "Auth:Users:0:Username" "admin"
+dotnet user-secrets set "Auth:Users:0:Role" "Admin"
+dotnet user-secrets set "Auth:Users:0:PasswordHash" "<hash-password-admin>"
+dotnet user-secrets set "Auth:Users:1:Username" "reader"
+dotnet user-secrets set "Auth:Users:1:Role" "Reader"
+dotnet user-secrets set "Auth:Users:1:PasswordHash" "<hash-password-reader>"
+```
+
+`PasswordHash` harus berupa hash **PBKDF2-SHA256**, bukan password plaintext, dengan format `iterations.saltBase64.hashBase64`. Gunakan salt acak minimal 16 byte, hasil derivasi 32 byte, dan 100000–1000000 iterasi (konfigurasi pengujian memakai 210000). Hash harus dibuat menggunakan password akun yang akan dipakai saat login. Placeholder di atas bukan konfigurasi siap pakai. Username maksimal 100 karakter; input password login maksimal 1024 unit UTF-16.
+
+- `UserSecretsId`: `if133-tugas1-api-local`; secret disimpan di profil pengguna di luar repository. User Secrets bukan penyimpanan terenkripsi dan bukan secret store produksi.
+- Tidak ada password default yang dibagikan. Gunakan password sesuai konfigurasi akun lokal.
 - `dotnet ef database update` diperlukan pada database baru; pengujian laporan ini memakai skema yang sudah ada dan tidak menerapkan migrasi baru.
 - Port launch profile HTTPS normal adalah `https://localhost:7216` (HTTP `5068`). Buka `https://localhost:7216/swagger`.
 - **Hentikan/restart instance lama milik Anda sebelum menjalankan source final.** Instance lama pada 7216/5068 tidak dihentikan oleh proses penyusunan laporan; proses lama dapat tetap melayani kode tanpa JWT.
@@ -148,7 +162,7 @@ Contoh request create/update (contoh format, bukan credential):
 3. Server mencari akun konfigurasi dan memverifikasi PBKDF2-SHA256; perbandingan hash menggunakan constant-time comparison. Akun tidak dikenal tetap menjalankan derivasi untuk membatasi perbedaan waktu.
 4. Jika salah, respons 401 generik tidak membedakan username yang tidak ada dengan password salah. Jika benar, server mengembalikan `accessToken`, `tokenType: Bearer`, `expiresIn`.
 5. Token berisi `sub`, `role`, `jti`, issuer, audience, not-before dan expiry; ditandatangani HS256. Password/hash tidak menjadi claim.
-6. Request berikutnya menggunakan header `Authorization: Bearer <accessToken>`.
+6. Request berikutnya menggunakan header `Authorization: Bearer ***
 7. Middleware memeriksa signature, algoritma HS256, issuer, audience, expiry dan not-before; toleransi waktu 30 detik.
 8. Tanpa token/token tidak valid → 401. Token Reader mengakses operasi mutasi → 403. Admin dapat CRUD, Reader hanya membaca.
 
@@ -247,7 +261,7 @@ Contoh konfigurasi **nonsecret** pada `appsettings.Development.json` bila origin
 ### Postman
 
 1. Restart aplikasi agar source final/JWT aktif, lalu import `Products.postman_collection.json`.
-2. Buat environment **lokal yang tidak dikumpulkan**, isi `baseUrl` (normal: `https://localhost:7216`), `adminUsername=admin`, `readerUsername=reader`, serta password yang ditetapkan melalui helper. Tandai password sebagai sensitive.
+2. Buat environment **lokal yang tidak dikumpulkan**, isi `baseUrl` (normal: `https://localhost:7216`), `adminUsername=admin`, `readerUsername=reader`, serta password yang sesuai dengan hash akun pada konfigurasi lokal. Tandai password sebagai sensitive.
 3. Jalankan seluruh collection berurutan. Request login menyimpan token secara otomatis; POST valid menyimpan `productId`; request terakhir menghapus hanya produk runner dan memverifikasi 404.
 4. Jika create gagal, collection menghentikan urutan agar tidak menargetkan ID yang salah. Jangan mengganti `productId` dengan produk pribadi.
 5. Setelah demo, kosongkan token/password lokal sebelum mengekspor collection. File collection yang diserahkan berisi nilai credential kosong.
@@ -267,19 +281,9 @@ Gunakan sertifikat development yang dipercaya. Pengujian ini tidak menggunakan `
 
 Buka `/swagger` pada Development. Login melalui `POST /api/auth/login`, salin `accessToken`, klik **Authorize**, lalu masukkan token tanpa awalan `Bearer`. Coba operasi sesuai role. Login tidak memerlukan token; operasi produk mempunyai bearer requirement. Runtime JSON berada pada `/swagger/v1/swagger.json`; file `openapi.json` dalam paket diekspor langsung dari runtime final.
 
-### Skrip integrasi Python
+### Catatan hasil pengujian sebelumnya
 
-`scripts/test_api.py` menggunakan standard library Python, tanpa mock database. Jalankan dengan environment `IF133_BASE_URL`, `IF133_ADMIN_USERNAME`, `IF133_ADMIN_PASSWORD`, `IF133_READER_USERNAME`, `IF133_READER_PASSWORD`. Masukkan password melalui input tersembunyi atau environment lokal, bukan literal yang dibagikan.
-
-Pemeriksaan JWT bertanda tangan dengan claim salah membutuhkan `IF133_JWT_KEY`, `IF133_JWT_ISSUER`, `IF133_JWT_AUDIENCE` sesuai server lokal. Kasus fault memerlukan `IF133_FAULT_BASE_URL` ke instance fault terisolasi. Kedua kelompok opsional ini diaktifkan pada run 54 skenario yang dilaporkan (`skippedGroups: []`). Jika variabelnya tidak diberikan, skrip mencetak SKIP dan mencatat kelompok yang dilewati di `skippedGroups`; jangan mengklaim 54 kasus tanpa memeriksa hasil JSON. Perbandingan produk awal diurutkan berdasarkan ID agar tidak bergantung pada urutan hasil database.
-
-Unit test helper konfigurasi dapat dijalankan ulang tanpa database atau credential:
-
-```powershell
-python -m unittest discover -s scripts -p test_configuration_helpers.py -v
-```
-
-`scripts/test_startup.py --dll <path-dll-hasil-build>` memeriksa startup dan Production. Atur `IF133_PRODUCTION_CONFIG_FILE` ke file konfigurasi flat privat di luar repo (dapat menunjuk User Secrets development untuk pengujian lokal). Skrip memakai proses terpisah pada loopback port 7290, lalu menghentikan proses miliknya. Jangan menjalankannya jika port tersebut sedang dipakai aplikasi lain.
+Hasil integrasi HTTP, startup dan unit test yang tersimpan merupakan rekaman pengujian saat verifikasi sebelumnya. Skrip bantu Python telah dihapus dari proyek dan tidak menjadi dependensi aplikasi. Pengujian API yang dapat dijalankan ulang dari repository menggunakan collection Postman/Newman di atas; hasil lama tidak diklaim sebagai hasil run baru setelah penghapusan skrip.
 
 ## 12. Bukti Postman dan hasil pengujian lengkap
 
@@ -326,7 +330,7 @@ Folder hasil tes hanya mempertahankan bukti terstruktur, ringkasan runner, outpu
 - Memperbaiki penambahan `traceId` ganda pada not-found sehingga respons 404 tidak berubah menjadi error 500.
 - Merapikan Swagger yang sebelumnya didaftarkan dua kali dan menambahkan Authorize/bearer scheme, anonymous login, serta metadata status response 201/204/error sesuai runtime.
 - Mengganti contoh `.http` template weatherforecast dengan endpoint yang benar.
-- Memperbarui collection, mengekspor OpenAPI runtime, menambahkan skrip konfigurasi/pengujian dan bukti hasil nyata.
+- Memperbarui collection, mengekspor OpenAPI runtime, melampirkan bukti hasil pengujian nyata.
 - Mempertahankan model produk, migrasi, mapping DTO, validasi dan CRUD yang sudah dibuat sebelumnya.
 
 ## 14. Checklist pengumpulan dan batas verifikasi
@@ -343,4 +347,4 @@ Folder hasil tes hanya mempertahankan bukti terstruktur, ringkasan runner, outpu
 - [x] Produk awal dibaca ulang setelah kedua runner dan tetap sama. Produk uji sudah dibersihkan; counter auto-increment database dapat bertambah akibat pembuatan/penghapusan produk uji.
 - [x] Nama paket mengikuti `IF133_P6_NIM_Nama`.
 
-Pengujian bukan penetration test menyeluruh, load test, atau audit deployment publik. Pengujian dilakukan pada MySQL lokal dengan skema yang sudah ada, bukan database kosong hasil migrasi ulang. Konkurensi multi-client dan identity provider eksternal belum diuji. Saat pindah komputer, buat ulang User Secrets melalui helper; secret tidak termasuk paket.
+Pengujian bukan penetration test menyeluruh, load test, atau audit deployment publik. Pengujian dilakukan pada MySQL lokal dengan skema yang sudah ada, bukan database kosong hasil migrasi ulang. Konkurensi multi-client dan identity provider eksternal belum diuji. Saat pindah komputer, buat ulang konfigurasi .NET User Secrets; secret tidak termasuk paket.
